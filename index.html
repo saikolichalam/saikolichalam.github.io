@@ -1,0 +1,1708 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sai Kolichalam — Firmware & Embedded Systems Engineer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&family=Oxanium:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#080d14;
+  --bg2:#0b1220;
+  --bg3:#0f172a;
+  --surface:#111827;
+  --surface2:#1a2535;
+  --surface3:#1e2d42;
+  --cyan:#00d4ff;
+  --cyan2:#00b8e0;
+  --cyan3:rgba(0,212,255,0.15);
+  --green:#00ff9d;
+  --green2:#00e085;
+  --blue:#4f8ef7;
+  --blue2:#3b7cf4;
+  --amber:#ffb830;
+  --red:#ff4757;
+  --border:rgba(0,212,255,0.1);
+  --border2:rgba(0,212,255,0.25);
+  --text:#d4e6f1;
+  --text2:#7a9bb5;
+  --text3:#3d5a73;
+  --mono:'JetBrains Mono',monospace;
+  --display:'Oxanium',sans-serif;
+}
+html{scroll-behavior:smooth}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:var(--mono);
+  font-size:14px;
+  line-height:1.7;
+  overflow-x:hidden;
+  cursor:none;
+}
+
+/* CUSTOM CURSOR */
+.cursor-outer{
+  position:fixed;width:28px;height:28px;
+  border:1px solid var(--cyan);
+  border-radius:50%;pointer-events:none;z-index:9999;
+  transform:translate(-50%,-50%);
+  transition:width 0.2s,height 0.2s,opacity 0.2s;
+  opacity:0.6;
+}
+.cursor-inner{
+  position:fixed;width:4px;height:4px;
+  background:var(--cyan);border-radius:50%;
+  pointer-events:none;z-index:9999;
+  transform:translate(-50%,-50%);
+}
+
+/* NAV */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  background:rgba(8,13,20,0.92);
+  backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--border);
+  height:56px;display:flex;align-items:center;
+  padding:0 2rem;justify-content:space-between;
+}
+.nav-brand{
+  font-family:var(--display);
+  font-size:15px;font-weight:700;
+  color:var(--cyan);letter-spacing:0.12em;
+  text-transform:uppercase;
+}
+.nav-brand span{color:var(--text2)}
+.nav-links{display:flex;gap:0;list-style:none}
+.nav-links a{
+  font-size:11px;color:var(--text2);text-decoration:none;
+  letter-spacing:0.1em;text-transform:uppercase;padding:0 1rem;
+  height:56px;display:flex;align-items:center;
+  border-right:1px solid var(--border);
+  transition:color 0.2s,background 0.2s;
+}
+.nav-links li:first-child a{border-left:1px solid var(--border)}
+.nav-links a:hover{color:var(--cyan);background:rgba(0,212,255,0.05)}
+.nav-status{
+  display:flex;align-items:center;gap:8px;
+  font-size:11px;color:var(--text3);
+}
+.status-dot{
+  width:6px;height:6px;border-radius:50%;
+  background:var(--green);
+  box-shadow:0 0 6px var(--green);
+  animation:pulse 2s infinite;
+}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
+
+/* HERO */
+#hero{
+  min-height:100vh;
+  position:relative;overflow:hidden;
+  display:flex;align-items:center;
+  padding:7rem 0 4rem;
+}
+canvas#pcb-canvas{
+  position:absolute;inset:0;opacity:0.35;
+  pointer-events:none;
+}
+.hero-inner{
+  position:relative;z-index:2;
+  max-width:1200px;margin:0 auto;
+  width:100%;padding:0 2rem;
+  display:grid;grid-template-columns:1fr 420px;
+  gap:4rem;align-items:center;
+}
+.hero-eyebrow{
+  font-size:11px;letter-spacing:0.2em;
+  text-transform:uppercase;color:var(--cyan);
+  margin-bottom:1.5rem;
+  display:flex;align-items:center;gap:10px;
+}
+.hero-eyebrow::before{
+  content:'';width:32px;height:1px;background:var(--cyan);
+}
+.hero-name{
+  font-family:var(--display);
+  font-size:clamp(2.8rem,5vw,4.5rem);
+  font-weight:700;line-height:1.05;
+  color:#fff;margin-bottom:0.5rem;
+  letter-spacing:0.02em;
+}
+.hero-title{
+  font-family:var(--display);
+  font-size:clamp(1rem,2vw,1.4rem);
+  font-weight:300;color:var(--cyan);
+  letter-spacing:0.08em;margin-bottom:1.5rem;
+}
+.hero-tagline{
+  font-size:13px;color:var(--text2);
+  max-width:480px;margin-bottom:2.5rem;
+  line-height:1.8;border-left:2px solid var(--cyan);
+  padding-left:1rem;
+}
+.hero-btns{display:flex;gap:12px;flex-wrap:wrap}
+.btn-cyber{
+  font-family:var(--mono);font-size:11px;
+  letter-spacing:0.12em;text-transform:uppercase;
+  padding:11px 22px;text-decoration:none;
+  display:inline-flex;align-items:center;gap:8px;
+  transition:all 0.2s;cursor:none;
+  clip-path:polygon(8px 0%,100% 0%,100% calc(100% - 8px),calc(100% - 8px) 100%,0% 100%,0% 8px);
+}
+.btn-primary{
+  background:var(--cyan);color:#000;font-weight:700;
+}
+.btn-primary:hover{background:var(--cyan2);transform:translateY(-2px)}
+.btn-outline{
+  background:transparent;color:var(--cyan);
+  border:1px solid var(--cyan2);
+}
+.btn-outline:hover{background:var(--cyan3);transform:translateY(-2px)}
+.btn-green{
+  background:transparent;color:var(--green);
+  border:1px solid var(--green2);
+}
+.btn-green:hover{background:rgba(0,255,157,0.1);transform:translateY(-2px)}
+
+/* MCU DIAGRAM */
+.mcu-diagram{
+  position:relative;
+  border:1px solid var(--border2);
+  background:var(--surface);
+  padding:1.5rem;
+  clip-path:polygon(12px 0%,100% 0%,100% calc(100% - 12px),calc(100% - 12px) 100%,0% 100%,0% 12px);
+}
+.mcu-chip{
+  background:var(--bg3);
+  border:1px solid rgba(0,212,255,0.3);
+  padding:1rem;margin:0 auto;
+  position:relative;
+  width:180px;
+}
+.mcu-chip-label{
+  text-align:center;font-family:var(--display);
+  font-size:11px;font-weight:700;color:var(--cyan);
+  letter-spacing:0.15em;margin-bottom:0.5rem;
+}
+.mcu-chip-model{
+  text-align:center;font-size:10px;color:var(--text3);
+}
+.mcu-pins{
+  display:flex;justify-content:space-between;
+  align-items:center;margin:1rem 0;
+}
+.mcu-pins-left,.mcu-pins-right{
+  display:flex;flex-direction:column;gap:6px;
+}
+.pin-row{
+  display:flex;align-items:center;gap:6px;
+  font-size:9px;color:var(--text3);
+}
+.pin-row.right{flex-direction:row-reverse}
+.pin-line{
+  width:18px;height:1px;
+  background:var(--cyan);
+  opacity:0.5;
+  position:relative;
+}
+.pin-line::before{
+  content:'';position:absolute;
+  right:-3px;top:-2px;
+  width:5px;height:5px;
+  background:var(--bg3);
+  border:1px solid var(--cyan);
+}
+.pin-row.right .pin-line::before{left:-3px;right:auto}
+.pin-label{color:var(--cyan);opacity:0.8}
+.mcu-metrics{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:8px;margin-top:1rem;
+}
+.metric{
+  background:var(--bg);
+  padding:8px;text-align:center;
+  border:1px solid var(--border);
+}
+.metric-val{
+  font-family:var(--display);font-size:14px;
+  font-weight:700;color:var(--green);
+}
+.metric-key{font-size:9px;color:var(--text3);margin-top:2px}
+
+/* SECTIONS */
+section{padding:5rem 2rem}
+.container{max-width:1200px;margin:0 auto}
+.sec-header{margin-bottom:3rem}
+.sec-line{
+  display:flex;align-items:center;gap:1rem;
+  margin-bottom:0.5rem;
+}
+.sec-num{
+  font-size:11px;color:var(--cyan);opacity:0.6;
+  font-weight:700;letter-spacing:0.1em;
+}
+.sec-tag{
+  font-size:11px;letter-spacing:0.2em;
+  text-transform:uppercase;color:var(--cyan);
+}
+.sec-title{
+  font-family:var(--display);
+  font-size:clamp(1.8rem,3vw,2.5rem);
+  font-weight:700;color:#fff;
+  letter-spacing:0.04em;margin-bottom:0.5rem;
+}
+.sec-divider{
+  width:60px;height:2px;
+  background:linear-gradient(90deg,var(--cyan),transparent);
+  margin:1rem 0;
+}
+
+/* ABOUT */
+#about{background:var(--bg2)}
+.about-grid{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:3rem;align-items:start;
+}
+.about-text p{
+  font-size:13px;color:var(--text2);
+  line-height:1.9;margin-bottom:1rem;
+}
+.code-block{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-top:2px solid var(--cyan);
+  padding:0;overflow:hidden;
+}
+.code-header{
+  background:var(--surface2);
+  padding:8px 14px;
+  display:flex;align-items:center;gap:8px;
+  border-bottom:1px solid var(--border);
+}
+.code-dots{display:flex;gap:5px}
+.code-dots span{
+  width:10px;height:10px;border-radius:50%;
+}
+.dot-r{background:#ff4757}
+.dot-y{background:#ffa502}
+.dot-g{background:#2ed573}
+.code-filename{
+  font-size:11px;color:var(--text3);margin-left:4px;
+}
+.code-body{
+  padding:1.25rem;overflow-x:auto;
+}
+.code-body pre{
+  font-size:12px;line-height:1.9;
+  white-space:pre;
+}
+.c-keyword{color:#ff79c6}
+.c-type{color:#8be9fd}
+.c-func{color:#50fa7b}
+.c-string{color:#f1fa8c}
+.c-comment{color:#6272a4;font-style:italic}
+.c-num{color:#bd93f9}
+.c-macro{color:#ff9580}
+
+/* SKILLS */
+.skills-grid{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));
+  gap:1.5rem;
+}
+.skill-card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  padding:1.5rem;
+  position:relative;overflow:hidden;
+  transition:border-color 0.2s,transform 0.2s;
+}
+.skill-card::before{
+  content:'';position:absolute;
+  top:0;left:0;right:0;height:2px;
+}
+.skill-card.mcu::before{background:var(--cyan)}
+.skill-card.lang::before{background:var(--blue)}
+.skill-card.proto::before{background:var(--green)}
+.skill-card.tools::before{background:var(--amber)}
+.skill-card.rtos::before{background:#ff79c6}
+.skill-card:hover{border-color:var(--border2);transform:translateY(-3px)}
+.skill-card-title{
+  font-family:var(--display);font-size:11px;
+  font-weight:700;letter-spacing:0.15em;text-transform:uppercase;
+  margin-bottom:1.25rem;
+}
+.skill-card.mcu .skill-card-title{color:var(--cyan)}
+.skill-card.lang .skill-card-title{color:var(--blue)}
+.skill-card.proto .skill-card-title{color:var(--green)}
+.skill-card.tools .skill-card-title{color:var(--amber)}
+.skill-card.rtos .skill-card-title{color:#ff79c6}
+.skill-pills{display:flex;flex-wrap:wrap;gap:8px}
+.skill-pill{
+  font-size:11px;padding:4px 10px;
+  border:1px solid;
+  display:flex;align-items:center;gap:5px;
+  transition:all 0.15s;
+}
+.skill-card.mcu .skill-pill{
+  color:var(--cyan);border-color:rgba(0,212,255,0.2);
+  background:rgba(0,212,255,0.04);
+}
+.skill-card.mcu .skill-pill:hover{background:rgba(0,212,255,0.12)}
+.skill-card.lang .skill-pill{
+  color:var(--blue);border-color:rgba(79,142,247,0.2);
+  background:rgba(79,142,247,0.04);
+}
+.skill-card.lang .skill-pill:hover{background:rgba(79,142,247,0.12)}
+.skill-card.proto .skill-pill{
+  color:var(--green);border-color:rgba(0,255,157,0.2);
+  background:rgba(0,255,157,0.04);
+}
+.skill-card.proto .skill-pill:hover{background:rgba(0,255,157,0.12)}
+.skill-card.tools .skill-pill{
+  color:var(--amber);border-color:rgba(255,184,48,0.2);
+  background:rgba(255,184,48,0.04);
+}
+.skill-card.tools .skill-pill:hover{background:rgba(255,184,48,0.12)}
+.skill-card.rtos .skill-pill{
+  color:#ff79c6;border-color:rgba(255,121,198,0.2);
+  background:rgba(255,121,198,0.04);
+}
+.skill-bar-wrap{margin-top:1.25rem}
+.skill-bar-item{margin-bottom:10px}
+.skill-bar-label{
+  display:flex;justify-content:space-between;
+  font-size:10px;color:var(--text3);margin-bottom:4px;
+}
+.skill-bar-track{
+  height:3px;background:var(--surface3);
+  overflow:hidden;
+}
+.skill-bar-fill{
+  height:100%;
+  transition:width 1.5s cubic-bezier(0.22,1,0.36,1);
+}
+
+/* PROJECTS */
+#projects{background:var(--bg2)}
+.projects-grid{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));
+  gap:1.5rem;
+}
+.project-card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  display:flex;flex-direction:column;
+  position:relative;overflow:hidden;
+  transition:all 0.25s;
+}
+.project-card:hover{border-color:var(--cyan);transform:translateY(-4px)}
+.project-card:hover .project-glow{opacity:1}
+.project-glow{
+  position:absolute;top:0;left:0;right:0;
+  height:120px;
+  background:linear-gradient(180deg,rgba(0,212,255,0.06),transparent);
+  pointer-events:none;opacity:0;transition:opacity 0.3s;
+}
+.project-header{
+  padding:1.5rem 1.5rem 1rem;
+  border-bottom:1px solid var(--border);
+  display:flex;justify-content:space-between;align-items:flex-start;
+}
+.project-badge{
+  font-size:9px;letter-spacing:0.12em;
+  text-transform:uppercase;padding:3px 9px;
+  border:1px solid;
+}
+.badge-esp{color:var(--green);border-color:rgba(0,255,157,0.3)}
+.badge-stm{color:var(--blue);border-color:rgba(79,142,247,0.3)}
+.badge-rtos{color:#ff79c6;border-color:rgba(255,121,198,0.3)}
+.badge-proto{color:var(--amber);border-color:rgba(255,184,48,0.3)}
+.badge-sec{color:var(--red);border-color:rgba(255,71,87,0.3)}
+.badge-ai{color:var(--cyan);border-color:rgba(0,212,255,0.3)}
+.project-status{
+  font-size:9px;color:var(--green);
+  display:flex;align-items:center;gap:5px;
+}
+.project-status::before{
+  content:'';width:5px;height:5px;
+  border-radius:50%;background:var(--green);
+  box-shadow:0 0 5px var(--green);
+  animation:pulse 2s infinite;
+}
+.project-body{padding:1.25rem 1.5rem;flex:1}
+.project-title{
+  font-family:var(--display);font-size:1rem;
+  font-weight:700;color:#fff;margin-bottom:0.5rem;
+}
+.project-desc{
+  font-size:12px;color:var(--text2);
+  line-height:1.8;margin-bottom:1rem;
+}
+.hw-label{
+  font-size:10px;color:var(--text3);
+  text-transform:uppercase;letter-spacing:0.1em;
+  margin-bottom:5px;
+}
+.hw-tags{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:1rem}
+.hw-tag{
+  font-size:10px;color:var(--cyan);
+  background:rgba(0,212,255,0.06);
+  border:1px solid rgba(0,212,255,0.15);
+  padding:2px 8px;
+}
+.feat-list{list-style:none;margin-bottom:0}
+.feat-list li{
+  font-size:11px;color:var(--text2);
+  padding:2px 0;padding-left:1rem;
+  position:relative;
+}
+.feat-list li::before{
+  content:'›';position:absolute;left:0;
+  color:var(--cyan);font-weight:700;
+}
+.project-footer{
+  padding:1rem 1.5rem;
+  border-top:1px solid var(--border);
+  display:flex;gap:12px;
+}
+.proj-link{
+  font-size:11px;color:var(--cyan);
+  text-decoration:none;letter-spacing:0.06em;
+  display:flex;align-items:center;gap:5px;
+  transition:color 0.2s;
+}
+.proj-link:hover{color:#fff}
+
+/* FIRMWARE ARCH */
+#architecture{background:var(--bg3)}
+.arch-diagram{
+  background:var(--surface);
+  border:1px solid var(--border);
+  padding:2rem;overflow-x:auto;
+}
+.arch-layers{
+  display:flex;flex-direction:column;gap:3px;
+  min-width:600px;
+}
+.arch-layer{
+  display:grid;gap:3px;
+  position:relative;
+}
+.arch-block{
+  padding:1rem 1.25rem;
+  border:1px solid;
+  display:flex;flex-direction:column;
+  position:relative;overflow:hidden;
+  transition:all 0.2s;cursor:default;
+}
+.arch-block:hover{transform:scaleX(1.01)}
+.arch-block::after{
+  content:'';position:absolute;
+  right:0;top:0;bottom:0;width:3px;
+}
+.arch-block.app{
+  background:rgba(0,212,255,0.06);
+  border-color:rgba(0,212,255,0.25);
+}
+.arch-block.app::after{background:var(--cyan)}
+.arch-block.rtos{
+  background:rgba(255,121,198,0.06);
+  border-color:rgba(255,121,198,0.25);
+}
+.arch-block.rtos::after{background:#ff79c6}
+.arch-block.drv{
+  background:rgba(79,142,247,0.06);
+  border-color:rgba(79,142,247,0.25);
+}
+.arch-block.drv::after{background:var(--blue)}
+.arch-block.hal{
+  background:rgba(0,255,157,0.06);
+  border-color:rgba(0,255,157,0.25);
+}
+.arch-block.hal::after{background:var(--green)}
+.arch-block.hw{
+  background:rgba(255,184,48,0.06);
+  border-color:rgba(255,184,48,0.25);
+}
+.arch-block.hw::after{background:var(--amber)}
+.arch-block.boot{
+  background:rgba(255,71,87,0.06);
+  border-color:rgba(255,71,87,0.25);
+}
+.arch-block.boot::after{background:var(--red)}
+.arch-block-title{
+  font-family:var(--display);font-size:11px;
+  font-weight:700;letter-spacing:0.12em;
+  text-transform:uppercase;margin-bottom:3px;
+}
+.arch-block.app .arch-block-title{color:var(--cyan)}
+.arch-block.rtos .arch-block-title{color:#ff79c6}
+.arch-block.drv .arch-block-title{color:var(--blue)}
+.arch-block.hal .arch-block-title{color:var(--green)}
+.arch-block.hw .arch-block-title{color:var(--amber)}
+.arch-block.boot .arch-block-title{color:var(--red)}
+.arch-block-desc{font-size:10px;color:var(--text3)}
+.arch-arrow{
+  text-align:center;font-size:16px;
+  color:var(--text3);line-height:1;padding:2px 0;
+}
+.layer-label{
+  font-size:9px;color:var(--text3);
+  letter-spacing:0.12em;text-transform:uppercase;
+  margin-bottom:4px;
+  display:flex;align-items:center;gap:8px;
+}
+.layer-label::after{
+  content:'';flex:1;height:1px;
+  background:var(--border);
+}
+
+/* PIN DIAGRAM */
+.pin-diagram-wrap{
+  margin-top:2rem;
+  background:var(--surface);
+  border:1px solid var(--border);
+  padding:1.5rem;
+  display:grid;grid-template-columns:1fr auto 1fr;
+  gap:1rem;align-items:center;
+}
+.pin-col{display:flex;flex-direction:column;gap:4px}
+.pin-col.right{align-items:flex-end}
+.pin-entry{
+  display:flex;align-items:center;gap:6px;
+  font-size:10px;
+}
+.pin-col.right .pin-entry{flex-direction:row-reverse}
+.pin-num{
+  width:20px;height:20px;
+  border:1px solid var(--border2);
+  background:var(--bg);
+  display:flex;align-items:center;justify-content:center;
+  font-size:9px;color:var(--text3);flex-shrink:0;
+}
+.pin-func{color:var(--cyan);font-weight:500}
+.pin-type{color:var(--text3);font-size:9px}
+.pin-wire{
+  flex:1;height:1px;
+  background:var(--border);position:relative;
+}
+.pin-wire.active{background:var(--cyan);box-shadow:0 0 4px var(--cyan)}
+.chip-center{
+  background:var(--bg3);
+  border:1px solid rgba(0,212,255,0.4);
+  padding:1.5rem 1rem;
+  text-align:center;min-width:140px;
+  box-shadow:0 0 30px rgba(0,212,255,0.1);
+}
+.chip-name{
+  font-family:var(--display);font-size:13px;
+  font-weight:700;color:var(--cyan);
+  letter-spacing:0.1em;display:block;
+}
+.chip-sub{font-size:9px;color:var(--text3);margin-top:4px}
+.chip-core{
+  margin-top:12px;font-size:10px;color:var(--text2);
+  border-top:1px solid var(--border);padding-top:10px;
+}
+
+/* PUBLICATIONS */
+#publications{background:var(--bg2)}
+.pub-list{display:flex;flex-direction:column;gap:1.25rem}
+.pub-card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-left:3px solid var(--cyan);
+  padding:1.5rem;
+  display:flex;gap:1.5rem;align-items:flex-start;
+  transition:border-color 0.2s;
+}
+.pub-card:hover{border-left-color:var(--cyan2)}
+.pub-year{
+  font-family:var(--display);font-size:1.2rem;
+  font-weight:700;color:var(--text3);
+  min-width:50px;padding-top:2px;
+}
+.pub-content{flex:1}
+.pub-title{
+  font-family:var(--display);font-size:14px;
+  font-weight:600;color:#fff;margin-bottom:5px;
+}
+.pub-journal{
+  font-size:11px;color:var(--cyan);
+  margin-bottom:8px;letter-spacing:0.04em;
+}
+.pub-abstract{font-size:12px;color:var(--text2);line-height:1.8}
+.pub-link{
+  display:inline-flex;align-items:center;gap:5px;
+  margin-top:10px;font-size:11px;
+  color:var(--blue);text-decoration:none;
+  border:1px solid rgba(79,142,247,0.2);
+  padding:3px 10px;
+  transition:all 0.2s;
+}
+.pub-link:hover{background:rgba(79,142,247,0.1);color:#fff}
+
+/* GITHUB */
+.gh-grid{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
+  gap:1.25rem;
+}
+.gh-card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  padding:1.25rem;
+  transition:all 0.2s;
+  position:relative;
+}
+.gh-card:hover{border-color:var(--border2);transform:translateY(-3px)}
+.gh-card-name{
+  font-family:var(--display);font-size:13px;
+  font-weight:600;color:var(--cyan);margin-bottom:5px;
+  display:flex;align-items:center;gap:8px;
+}
+.gh-card-icon{font-size:12px;opacity:0.6}
+.gh-card-desc{font-size:11px;color:var(--text2);line-height:1.7;margin-bottom:1rem}
+.gh-card-meta{
+  display:flex;gap:12px;flex-wrap:wrap;
+  font-size:10px;color:var(--text3);
+}
+.gh-meta-item{
+  display:flex;align-items:center;gap:4px;
+}
+.gh-lang-dot{
+  width:8px;height:8px;border-radius:50%;
+}
+.gh-stats-row{
+  display:grid;grid-template-columns:repeat(4,1fr);
+  gap:1px;background:var(--border);
+  margin-top:2rem;overflow:hidden;
+}
+.gh-stat{
+  background:var(--surface);
+  padding:1.25rem;text-align:center;
+}
+.gh-stat-num{
+  font-family:var(--display);font-size:1.8rem;
+  font-weight:700;color:var(--green);
+}
+.gh-stat-label{font-size:10px;color:var(--text3);margin-top:4px;letter-spacing:0.08em}
+
+/* CONTACT */
+#contact{background:var(--bg3)}
+.contact-grid{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:1.5rem;max-width:700px;
+}
+.contact-card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  padding:1.5rem;
+  display:flex;align-items:center;gap:1rem;
+  text-decoration:none;
+  transition:all 0.2s;position:relative;overflow:hidden;
+}
+.contact-card:hover{border-color:var(--border2);transform:translateY(-3px)}
+.contact-card:hover .contact-icon-wrap{
+  background:rgba(0,212,255,0.12);
+  border-color:var(--cyan);
+}
+.contact-icon-wrap{
+  width:44px;height:44px;
+  border:1px solid var(--border2);
+  display:flex;align-items:center;justify-content:center;
+  font-size:14px;color:var(--cyan);
+  font-family:var(--display);font-weight:700;
+  transition:all 0.2s;flex-shrink:0;
+}
+.contact-label{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:0.1em}
+.contact-val{font-size:13px;color:var(--text);margin-top:2px;font-weight:500}
+.contact-card.resume{
+  grid-column:span 2;
+  background:linear-gradient(135deg,rgba(0,212,255,0.08),rgba(79,142,247,0.08));
+  border-color:rgba(0,212,255,0.25);
+  justify-content:center;gap:12px;
+}
+.contact-card.resume:hover{background:linear-gradient(135deg,rgba(0,212,255,0.14),rgba(79,142,247,0.14))}
+.contact-card.resume .contact-val{color:var(--cyan);font-size:14px;font-family:var(--display);letter-spacing:0.08em;text-transform:uppercase}
+
+/* FOOTER */
+footer{
+  border-top:1px solid var(--border);
+  padding:1.5rem 2rem;
+  display:flex;justify-content:space-between;
+  align-items:center;flex-wrap:wrap;gap:1rem;
+}
+.footer-left{font-size:11px;color:var(--text3)}
+.footer-left span{color:var(--cyan)}
+.footer-right{
+  display:flex;gap:1rem;
+}
+.footer-link{
+  font-size:10px;color:var(--text3);
+  text-decoration:none;letter-spacing:0.08em;
+  text-transform:uppercase;
+  transition:color 0.2s;
+}
+.footer-link:hover{color:var(--cyan)}
+
+/* REVEAL */
+.reveal{opacity:0;transform:translateY(20px);transition:opacity 0.7s ease,transform 0.7s ease}
+.reveal.in{opacity:1;transform:none}
+.reveal-d1{transition-delay:0.1s}
+.reveal-d2{transition-delay:0.2s}
+.reveal-d3{transition-delay:0.3s}
+.reveal-d4{transition-delay:0.4s}
+
+/* SCROLLBAR */
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--border2)}
+::-webkit-scrollbar-thumb:hover{background:var(--cyan)}
+
+@media(max-width:900px){
+  .hero-inner{grid-template-columns:1fr}
+  .mcu-diagram{display:none}
+  .about-grid{grid-template-columns:1fr}
+  .contact-grid{grid-template-columns:1fr}
+  .contact-card.resume{grid-column:span 1}
+  .nav-links{display:none}
+  .gh-stats-row{grid-template-columns:repeat(2,1fr)}
+}
+</style>
+</head>
+<body>
+
+<div class="cursor-outer" id="co"></div>
+<div class="cursor-inner" id="ci"></div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-brand">SK<span>::</span>dev</div>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#architecture">Architecture</a></li>
+    <li><a href="#publications">Papers</a></li>
+    <li><a href="#github">GitHub</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <div class="nav-status">
+    <div class="status-dot"></div>
+    <span>Open to Work</span>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <canvas id="pcb-canvas"></canvas>
+  <div class="hero-inner">
+    <div>
+      <div class="hero-eyebrow">Firmware Engineer &amp; Embedded Systems Developer</div>
+      <h1 class="hero-name">Sai<br>Kolichalam</h1>
+      <div class="hero-title">// Building Reliable Firmware<br>&nbsp;&nbsp;&nbsp;for Intelligent Hardware</div>
+      <p class="hero-tagline">
+        M.S. Candidate · Rowan University · Philadelphia, PA<br>
+        Specializing in ARM Cortex-M firmware, IoT architectures,<br>
+        PCB design, and embedded security systems at Nevro Corp.
+      </p>
+      <div class="hero-btns">
+        <a href="#projects" class="btn-cyber btn-primary">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+          View Projects
+        </a>
+        <a href="https://github.com/saikolichalam" target="_blank" class="btn-cyber btn-outline">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+          GitHub
+        </a>
+        <a href="#contact" class="btn-cyber btn-green">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          Contact
+        </a>
+      </div>
+    </div>
+
+    <!-- MCU WIDGET -->
+    <div class="mcu-diagram reveal reveal-d2">
+      <div class="code-block" style="margin-bottom:1rem">
+        <div class="code-header">
+          <div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div>
+          <span class="code-filename">main.c — STM32F4</span>
+        </div>
+        <div class="code-body">
+<pre><span class="c-comment">/* Firmware Init Sequence */</span>
+<span class="c-keyword">#include</span> <span class="c-string">"stm32f4xx_hal.h"</span>
+<span class="c-keyword">#include</span> <span class="c-string">"FreeRTOS.h"</span>
+
+<span class="c-type">int</span> <span class="c-func">main</span>(<span class="c-type">void</span>) {
+  <span class="c-func">HAL_Init</span>();
+  <span class="c-func">SystemClock_Config</span>();
+  <span class="c-func">MX_GPIO_Init</span>();
+  <span class="c-func">MX_USART2_Init</span>();
+
+  <span class="c-func">xTaskCreate</span>(
+    sensorTask,
+    <span class="c-string">"SENSOR"</span>,
+    <span class="c-num">256</span>,
+    <span class="c-keyword">NULL</span>,
+    <span class="c-num">2</span>,
+    <span class="c-keyword">&amp;</span>hSensor
+  );
+  <span class="c-func">vTaskStartScheduler</span>();
+  <span class="c-keyword">while</span>(<span class="c-num">1</span>){}
+}</pre>
+        </div>
+      </div>
+      <div class="mcu-metrics">
+        <div class="metric"><div class="metric-val">168</div><div class="metric-key">MHz Clock</div></div>
+        <div class="metric"><div class="metric-val">1MB</div><div class="metric-key">Flash</div></div>
+        <div class="metric"><div class="metric-val">192</div><div class="metric-key">KB SRAM</div></div>
+        <div class="metric"><div class="metric-val">FPU</div><div class="metric-key">Cortex-M4</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="container">
+    <div class="sec-header">
+      <div class="sec-line"><span class="sec-num">01</span><span class="sec-tag">About</span></div>
+      <h2 class="sec-title">System Overview</h2>
+      <div class="sec-divider"></div>
+    </div>
+    <div class="about-grid">
+      <div class="about-text reveal">
+        <p>I'm an embedded systems engineer with hands-on experience designing and deploying firmware for production-grade hardware — from medical neurostimulator devices at Nevro Corp to open-source research prototypes. I bridge the gap between hardware schematics and application software.</p>
+        <p>My expertise spans bare-metal firmware development on ARM Cortex-M platforms, real-time operating systems (FreeRTOS), multi-protocol communication stacks, PCB bring-up, and embedded network security assessment.</p>
+        <p>Currently pursuing an M.S. in Electrical and Computer Engineering at Rowan University, where I also conduct research on smart materials and IoT security vulnerabilities. I'm actively seeking embedded/firmware/IoT security engineering roles.</p>
+        <div style="margin-top:1.5rem;display:flex;flex-wrap:wrap;gap:8px">
+          <span class="hw-tag">📍 Philadelphia, PA</span>
+          <span class="hw-tag" style="color:var(--green);border-color:rgba(0,255,157,0.25)">✦ Open to Work</span>
+          <span class="hw-tag" style="color:var(--amber);border-color:rgba(255,184,48,0.25)">🎓 Rowan University M.S.</span>
+        </div>
+      </div>
+      <div class="reveal reveal-d2">
+        <div class="code-block">
+          <div class="code-header">
+            <div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div>
+            <span class="code-filename">sai_profile.h</span>
+          </div>
+          <div class="code-body">
+<pre><span class="c-comment">/**
+ * @brief Engineer Profile
+ * @author Sai Kolichalam
+ */</span>
+
+<span class="c-keyword">typedef struct</span> {
+  <span class="c-type">char</span>  name[]     = <span class="c-string">"Sai Kolichalam"</span>;
+  <span class="c-type">char</span>  role[]     = <span class="c-string">"Firmware Eng"</span>;
+  <span class="c-type">char</span>  company[]  = <span class="c-string">"Nevro Corp"</span>;
+  <span class="c-type">char</span>  degree[]   = <span class="c-string">"M.S. ECE"</span>;
+  <span class="c-type">char</span>  location[] = <span class="c-string">"Philadelphia"</span>;
+
+  <span class="c-type">uint8_t</span>  yrs_exp  = <span class="c-num">3</span>;
+  <span class="c-type">bool</span>  open_work   = <span class="c-keyword">true</span>;
+  <span class="c-type">bool</span>  rtos_exp    = <span class="c-keyword">true</span>;
+  <span class="c-type">bool</span>  pcb_design  = <span class="c-keyword">true</span>;
+
+  <span class="c-type">char</span>  interests[] = {
+    <span class="c-string">"IoT Security"</span>,
+    <span class="c-string">"Edge ML"</span>,
+    <span class="c-string">"Motor Control"</span>,
+    <span class="c-string">"Medical Devices"</span>
+  };
+} <span class="c-type">EngineerProfile_t</span>;</pre>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills">
+  <div class="container">
+    <div class="sec-header">
+      <div class="sec-line"><span class="sec-num">02</span><span class="sec-tag">Capabilities</span></div>
+      <h2 class="sec-title">Skills &amp; Toolchain</h2>
+      <div class="sec-divider"></div>
+    </div>
+    <div class="skills-grid">
+      <div class="skill-card mcu reveal">
+        <div class="skill-card-title">Microcontrollers</div>
+        <div class="skill-pills">
+          <span class="skill-pill">STM32</span>
+          <span class="skill-pill">ESP32</span>
+          <span class="skill-pill">Arduino</span>
+          <span class="skill-pill">ARM Cortex-M</span>
+          <span class="skill-pill">PIC</span>
+          <span class="skill-pill">nRF52</span>
+          <span class="skill-pill">Raspberry Pi</span>
+        </div>
+        <div class="skill-bar-wrap">
+          <div class="skill-bar-item">
+            <div class="skill-bar-label"><span>STM32</span><span>95%</span></div>
+            <div class="skill-bar-track"><div class="skill-bar-fill" data-w="95" style="background:var(--cyan);width:0%"></div></div>
+          </div>
+          <div class="skill-bar-item">
+            <div class="skill-bar-label"><span>ESP32</span><span>88%</span></div>
+            <div class="skill-bar-track"><div class="skill-bar-fill" data-w="88" style="background:var(--cyan);width:0%"></div></div>
+          </div>
+          <div class="skill-bar-item">
+            <div class="skill-bar-label"><span>ARM Cortex-M</span><span>90%</span></div>
+            <div class="skill-bar-track"><div class="skill-bar-fill" data-w="90" style="background:var(--cyan);width:0%"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="skill-card lang reveal reveal-d1">
+        <div class="skill-card-title">Programming Languages</div>
+        <div class="skill-pills">
+          <span class="skill-pill">C</span>
+          <span class="skill-pill">Embedded C</span>
+          <span class="skill-pill">C++</span>
+          <span class="skill-pill">Python</span>
+          <span class="skill-pill">VHDL</span>
+          <span class="skill-pill">Assembly</span>
+          <span class="skill-pill">Bash</span>
+          <span class="skill-pill">MATLAB</span>
+        </div>
+        <div class="skill-bar-wrap">
+          <div class="skill-bar-item">
+            <div class="skill-bar-label"><span>C / Embedded C</span><span>97%</span></div>
+            <div class="skill-bar-track"><div class="skill-bar-fill" data-w="97" style="background:var(--blue);width:0%"></div></div>
+          </div>
+          <div class="skill-bar-item">
+            <div class="skill-bar-label"><span>C++</span><span>82%</span></div>
+            <div class="skill-bar-track"><div class="skill-bar-fill" data-w="82" style="background:var(--blue);width:0%"></div></div>
+          </div>
+          <div class="skill-bar-item">
+            <div class="skill-bar-label"><span>Python</span><span>80%</span></div>
+            <div class="skill-bar-track"><div class="skill-bar-fill" data-w="80" style="background:var(--blue);width:0%"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="skill-card proto reveal reveal-d2">
+        <div class="skill-card-title">Protocols &amp; Interfaces</div>
+        <div class="skill-pills">
+          <span class="skill-pill">UART</span>
+          <span class="skill-pill">SPI</span>
+          <span class="skill-pill">I²C</span>
+          <span class="skill-pill">CAN Bus</span>
+          <span class="skill-pill">Modbus</span>
+          <span class="skill-pill">BLE</span>
+          <span class="skill-pill">MQTT</span>
+          <span class="skill-pill">USB</span>
+          <span class="skill-pill">LoRa</span>
+          <span class="skill-pill">Ethernet</span>
+        </div>
+      </div>
+
+      <div class="skill-card tools reveal reveal-d1">
+        <div class="skill-card-title">Development Tools</div>
+        <div class="skill-pills">
+          <span class="skill-pill">Keil MDK</span>
+          <span class="skill-pill">STM32CubeIDE</span>
+          <span class="skill-pill">PlatformIO</span>
+          <span class="skill-pill">KiCad</span>
+          <span class="skill-pill">Altium</span>
+          <span class="skill-pill">LTSpice</span>
+          <span class="skill-pill">JTAG/SWD</span>
+          <span class="skill-pill">J-Link</span>
+          <span class="skill-pill">Logic Analyzer</span>
+          <span class="skill-pill">Oscilloscope</span>
+          <span class="skill-pill">GDB</span>
+          <span class="skill-pill">Git</span>
+        </div>
+      </div>
+
+      <div class="skill-card rtos reveal reveal-d2">
+        <div class="skill-card-title">RTOS &amp; Security</div>
+        <div class="skill-pills">
+          <span class="skill-pill">FreeRTOS</span>
+          <span class="skill-pill">CMSIS-RTOS</span>
+          <span class="skill-pill">Zephyr OS</span>
+          <span class="skill-pill">Kali Linux</span>
+          <span class="skill-pill">Nessus</span>
+          <span class="skill-pill">Wireshark</span>
+          <span class="skill-pill">Metasploit</span>
+          <span class="skill-pill">Nmap</span>
+        </div>
+        <div class="skill-bar-wrap">
+          <div class="skill-bar-item">
+            <div class="skill-bar-label"><span>FreeRTOS</span><span>88%</span></div>
+            <div class="skill-bar-track"><div class="skill-bar-fill" data-w="88" style="background:#ff79c6;width:0%"></div></div>
+          </div>
+          <div class="skill-bar-item">
+            <div class="skill-bar-label"><span>Network Security</span><span>78%</span></div>
+            <div class="skill-bar-track"><div class="skill-bar-fill" data-w="78" style="background:#ff79c6;width:0%"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="container">
+    <div class="sec-header">
+      <div class="sec-line"><span class="sec-num">03</span><span class="sec-tag">Portfolio</span></div>
+      <h2 class="sec-title">Project Registry</h2>
+      <div class="sec-divider"></div>
+    </div>
+    <div class="projects-grid">
+
+      <div class="project-card reveal">
+        <div class="project-glow"></div>
+        <div class="project-header">
+          <span class="project-badge badge-esp">ESP32 / IoT</span>
+          <span class="project-status">Active</span>
+        </div>
+        <div class="project-body">
+          <div class="project-title">Smart IoT Sensor Node</div>
+          <p class="project-desc">Multi-sensor edge node with MQTT telemetry, OTA updates, and deep-sleep power optimization achieving &lt;15µA standby current.</p>
+          <div class="hw-label">Hardware</div>
+          <div class="hw-tags">
+            <span class="hw-tag">ESP32-S3</span>
+            <span class="hw-tag">BME680</span>
+            <span class="hw-tag">Custom PCB</span>
+            <span class="hw-tag">Li-Po</span>
+          </div>
+          <div class="hw-label">Features</div>
+          <ul class="feat-list">
+            <li>MQTT over TLS with AWS IoT Core</li>
+            <li>Sensor fusion: temp, humidity, VOC, pressure</li>
+            <li>FreeRTOS task scheduler, deep-sleep &lt;15µA</li>
+            <li>OTA firmware update via HTTPS</li>
+          </ul>
+        </div>
+        <div class="project-footer">
+          <a href="https://github.com/saikolichalam" target="_blank" class="proj-link">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+            GitHub
+          </a>
+          <a href="#" class="proj-link" style="color:var(--text3)">↗ Demo</a>
+        </div>
+      </div>
+
+      <div class="project-card reveal reveal-d1">
+        <div class="project-glow"></div>
+        <div class="project-header">
+          <span class="project-badge badge-stm">STM32 / Motor</span>
+          <span class="project-status">Complete</span>
+        </div>
+        <div class="project-body">
+          <div class="project-title">STM32 Motor Control Firmware</div>
+          <p class="project-desc">Field-oriented control (FOC) firmware for BLDC motor using STM32G4 with advanced current sensing and speed regulation.</p>
+          <div class="hw-label">Hardware</div>
+          <div class="hw-tags">
+            <span class="hw-tag">STM32G431</span>
+            <span class="hw-tag">DRV8316</span>
+            <span class="hw-tag">Current Sense</span>
+            <span class="hw-tag">Encoder</span>
+          </div>
+          <div class="hw-label">Features</div>
+          <ul class="feat-list">
+            <li>FOC with space vector PWM (SVPWM)</li>
+            <li>PI current control loop @ 20kHz</li>
+            <li>CAN Bus speed/torque commands</li>
+            <li>Fault detection & safe-state handling</li>
+          </ul>
+        </div>
+        <div class="project-footer">
+          <a href="https://github.com/saikolichalam" target="_blank" class="proj-link">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+            GitHub
+          </a>
+        </div>
+      </div>
+
+      <div class="project-card reveal reveal-d2">
+        <div class="project-glow"></div>
+        <div class="project-header">
+          <span class="project-badge badge-rtos">RTOS / Data</span>
+          <span class="project-status">Active</span>
+        </div>
+        <div class="project-body">
+          <div class="project-title">RTOS-Based Data Logger</div>
+          <p class="project-desc">High-speed multi-channel data acquisition system with SD card logging, real-time display, and USB data export at 10kSPS.</p>
+          <div class="hw-label">Hardware</div>
+          <div class="hw-tags">
+            <span class="hw-tag">STM32F4</span>
+            <span class="hw-tag">ADS1256</span>
+            <span class="hw-tag">FatFS</span>
+            <span class="hw-tag">SSD1306</span>
+          </div>
+          <div class="hw-label">Features</div>
+          <ul class="feat-list">
+            <li>FreeRTOS tasks: Acquire, Log, Display, USB</li>
+            <li>DMA-driven SPI @ 10kSPS, 8-channel ADC</li>
+            <li>FatFS ring-buffer to SD with timestamp</li>
+            <li>USB CDC export to CSV in real-time</li>
+          </ul>
+        </div>
+        <div class="project-footer">
+          <a href="https://github.com/saikolichalam" target="_blank" class="proj-link">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+            GitHub
+          </a>
+        </div>
+      </div>
+
+      <div class="project-card reveal">
+        <div class="project-glow"></div>
+        <div class="project-header">
+          <span class="project-badge badge-proto">Comm Stack</span>
+          <span class="project-status">Complete</span>
+        </div>
+        <div class="project-body">
+          <div class="project-title">Embedded Communication Stack</div>
+          <p class="project-desc">Custom lightweight protocol stack for multi-node mesh networks on constrained microcontrollers with CRC error recovery.</p>
+          <div class="hw-label">Hardware</div>
+          <div class="hw-tags">
+            <span class="hw-tag">STM32L0</span>
+            <span class="hw-tag">SX1276</span>
+            <span class="hw-tag">LoRa</span>
+            <span class="hw-tag">RS-485</span>
+          </div>
+          <div class="hw-label">Features</div>
+          <ul class="feat-list">
+            <li>Custom framing: start byte, length, CRC16</li>
+            <li>Modbus RTU master/slave implementation</li>
+            <li>LoRa mesh routing with ACK/retry logic</li>
+            <li>Wireshark dissector plugin for debugging</li>
+          </ul>
+        </div>
+        <div class="project-footer">
+          <a href="https://github.com/saikolichalam" target="_blank" class="proj-link">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+            GitHub
+          </a>
+        </div>
+      </div>
+
+      <div class="project-card reveal reveal-d1">
+        <div class="project-glow"></div>
+        <div class="project-header">
+          <span class="project-badge badge-sec">Security</span>
+          <span class="project-status">Active</span>
+        </div>
+        <div class="project-body">
+          <div class="project-title">Nessus Vulnerability Scanning Lab</div>
+          <p class="project-desc">Comprehensive IoT device vulnerability assessment using Nessus Essentials on Kali Linux — from scan policy design to CVE triage.</p>
+          <div class="hw-label">Stack</div>
+          <div class="hw-tags">
+            <span class="hw-tag" style="color:var(--red);border-color:rgba(255,71,87,0.25)">Nessus</span>
+            <span class="hw-tag" style="color:var(--red);border-color:rgba(255,71,87,0.25)">Kali Linux</span>
+            <span class="hw-tag" style="color:var(--red);border-color:rgba(255,71,87,0.25)">Wireshark</span>
+          </div>
+          <div class="hw-label">Features</div>
+          <ul class="feat-list">
+            <li>Scan policy configuration for IoT targets</li>
+            <li>CVE severity classification & CVSS scoring</li>
+            <li>Remediation priority report generation</li>
+            <li>Network topology mapping and enumeration</li>
+          </ul>
+        </div>
+        <div class="project-footer">
+          <a href="https://github.com/saikolichalam/nessus-vulnerability-scanning" target="_blank" class="proj-link">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+            GitHub
+          </a>
+        </div>
+      </div>
+
+      <div class="project-card reveal reveal-d2">
+        <div class="project-glow"></div>
+        <div class="project-header">
+          <span class="project-badge badge-ai">AI / Platform</span>
+          <span class="project-status">Active</span>
+        </div>
+        <div class="project-body">
+          <div class="project-title">saiko.ai — Edge AI Platform</div>
+          <p class="project-desc">AI-powered platform for intelligent IoT edge systems. Explores ML inference on constrained microcontrollers with cloud sync.</p>
+          <div class="hw-label">Stack</div>
+          <div class="hw-tags">
+            <span class="hw-tag">Python</span>
+            <span class="hw-tag">TensorFlow Lite</span>
+            <span class="hw-tag">ESP32-S3</span>
+            <span class="hw-tag">MQTT</span>
+          </div>
+          <div class="hw-label">Features</div>
+          <ul class="feat-list">
+            <li>On-device ML inference with TFLite Micro</li>
+            <li>Model quantization for MCU deployment</li>
+            <li>Cloud dashboard for fleet management</li>
+            <li>Anomaly detection on sensor time-series</li>
+          </ul>
+        </div>
+        <div class="project-footer">
+          <a href="https://github.com/saikolichalam/saiko.ai" target="_blank" class="proj-link">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+            GitHub
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- FIRMWARE ARCHITECTURE -->
+<section id="architecture">
+  <div class="container">
+    <div class="sec-header">
+      <div class="sec-line"><span class="sec-num">04</span><span class="sec-tag">System Design</span></div>
+      <h2 class="sec-title">Firmware Architecture</h2>
+      <div class="sec-divider"></div>
+    </div>
+    <div class="arch-diagram reveal">
+      <div class="arch-layers">
+        <div class="layer-label">Application Layer</div>
+        <div class="arch-layer" style="grid-template-columns:1fr 1fr 1fr 1fr">
+          <div class="arch-block app">
+            <div class="arch-block-title">User App</div>
+            <div class="arch-block-desc">Business logic, state machines, CLI</div>
+          </div>
+          <div class="arch-block app">
+            <div class="arch-block-title">Comm Manager</div>
+            <div class="arch-block-desc">MQTT, BLE, Modbus protocol handlers</div>
+          </div>
+          <div class="arch-block app">
+            <div class="arch-block-title">Data Manager</div>
+            <div class="arch-block-desc">Sensor fusion, data store, logging</div>
+          </div>
+          <div class="arch-block app">
+            <div class="arch-block-title">OTA Manager</div>
+            <div class="arch-block-desc">Firmware update, image validation</div>
+          </div>
+        </div>
+        <div class="arch-arrow">↕</div>
+        <div class="layer-label">RTOS Layer (FreeRTOS)</div>
+        <div class="arch-layer" style="grid-template-columns:1fr 1fr 1fr">
+          <div class="arch-block rtos">
+            <div class="arch-block-title">Task Scheduler</div>
+            <div class="arch-block-desc">Preemptive priority-based scheduling</div>
+          </div>
+          <div class="arch-block rtos">
+            <div class="arch-block-title">IPC Primitives</div>
+            <div class="arch-block-desc">Queues, semaphores, mutexes, events</div>
+          </div>
+          <div class="arch-block rtos">
+            <div class="arch-block-title">Memory Manager</div>
+            <div class="arch-block-desc">Heap5 allocator, stack monitoring</div>
+          </div>
+        </div>
+        <div class="arch-arrow">↕</div>
+        <div class="layer-label">Drivers Layer</div>
+        <div class="arch-layer" style="grid-template-columns:repeat(5,1fr)">
+          <div class="arch-block drv">
+            <div class="arch-block-title">UART Drv</div>
+            <div class="arch-block-desc">DMA Tx/Rx, ring buffer</div>
+          </div>
+          <div class="arch-block drv">
+            <div class="arch-block-title">SPI Drv</div>
+            <div class="arch-block-desc">Master, DMA, CS control</div>
+          </div>
+          <div class="arch-block drv">
+            <div class="arch-block-title">I²C Drv</div>
+            <div class="arch-block-desc">Master/slave, 400kHz</div>
+          </div>
+          <div class="arch-block drv">
+            <div class="arch-block-title">CAN Drv</div>
+            <div class="arch-block-desc">FDCAN, filter config</div>
+          </div>
+          <div class="arch-block drv">
+            <div class="arch-block-title">ADC/DMA</div>
+            <div class="arch-block-desc">Multi-channel, triggered</div>
+          </div>
+        </div>
+        <div class="arch-arrow">↕</div>
+        <div class="layer-label">HAL / CMSIS Layer</div>
+        <div class="arch-layer" style="grid-template-columns:1fr 1fr">
+          <div class="arch-block hal">
+            <div class="arch-block-title">STM32 HAL / LL</div>
+            <div class="arch-block-desc">ST-provided Hardware Abstraction Layer, low-level peripheral access</div>
+          </div>
+          <div class="arch-block hal">
+            <div class="arch-block-title">CMSIS Core</div>
+            <div class="arch-block-desc">ARM Cortex-M core definitions, NVIC, SysTick, MPU</div>
+          </div>
+        </div>
+        <div class="arch-arrow">↕</div>
+        <div class="layer-label">Bootloader</div>
+        <div class="arch-layer" style="grid-template-columns:1fr 1fr 1fr">
+          <div class="arch-block boot">
+            <div class="arch-block-title">Custom Bootloader</div>
+            <div class="arch-block-desc">Image verify, jump to app, failsafe</div>
+          </div>
+          <div class="arch-block boot">
+            <div class="arch-block-title">Flash Manager</div>
+            <div class="arch-block-desc">Sector erase, write, CRC verify</div>
+          </div>
+          <div class="arch-block boot">
+            <div class="arch-block-title">Secure Boot</div>
+            <div class="arch-block-desc">ECDSA signature check, rollback guard</div>
+          </div>
+        </div>
+        <div class="arch-arrow">↕</div>
+        <div class="layer-label">Hardware</div>
+        <div class="arch-layer" style="grid-template-columns:repeat(4,1fr)">
+          <div class="arch-block hw">
+            <div class="arch-block-title">ARM Cortex-M4</div>
+            <div class="arch-block-desc">168MHz, FPU, MPU</div>
+          </div>
+          <div class="arch-block hw">
+            <div class="arch-block-title">Flash / SRAM</div>
+            <div class="arch-block-desc">1MB / 192KB</div>
+          </div>
+          <div class="arch-block hw">
+            <div class="arch-block-title">Peripherals</div>
+            <div class="arch-block-desc">GPIO, TIM, ADC, DAC</div>
+          </div>
+          <div class="arch-block hw">
+            <div class="arch-block-title">PCB Hardware</div>
+            <div class="arch-block-desc">Power, sensors, actuators</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PIN DIAGRAM -->
+    <h3 style="font-family:var(--display);font-size:13px;font-weight:600;color:var(--text2);letter-spacing:0.1em;text-transform:uppercase;margin:2.5rem 0 1rem">Interactive Pin Assignment — STM32F4</h3>
+    <div class="pin-diagram-wrap reveal">
+      <div class="pin-col" id="pin-left"></div>
+      <div class="chip-center">
+        <span class="chip-name">STM32F407VG</span>
+        <div class="chip-sub">LQFP-100</div>
+        <div class="chip-core">ARM® Cortex®-M4<br>168 MHz · 1MB Flash</div>
+      </div>
+      <div class="pin-col right" id="pin-right"></div>
+    </div>
+  </div>
+</section>
+
+<!-- PUBLICATIONS -->
+<section id="publications">
+  <div class="container">
+    <div class="sec-header">
+      <div class="sec-line"><span class="sec-num">05</span><span class="sec-tag">Research</span></div>
+      <h2 class="sec-title">Publications</h2>
+      <div class="sec-divider"></div>
+    </div>
+    <div class="pub-list">
+      <div class="pub-card reveal">
+        <div class="pub-year">2025</div>
+        <div class="pub-content">
+          <div class="pub-title">Mechanically-Activated Elastomeric Composite Pavement System for Passive Ice Mitigation via Viscoelastic Heat Generation</div>
+          <div class="pub-journal">Manuscript · Smart Materials &amp; Infrastructure Research</div>
+          <p class="pub-abstract">Proposes a novel passive pavement system that harvests vehicular mechanical energy through viscoelastic hysteresis in elastomeric composites to generate localized heat — preventing ice formation without active systems or chemical deicers. Covers material selection, thermomechanical modeling, and smart infrastructure deployment scenarios.</p>
+          <a href="https://github.com/saikolichalam/mechanically-activated-elastomeric-composite-pavement" target="_blank" class="pub-link">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+            View Repository
+          </a>
+        </div>
+      </div>
+      <div class="pub-card reveal reveal-d1">
+        <div class="pub-year">2024</div>
+        <div class="pub-content">
+          <div class="pub-title">Vulnerability Assessment Methodologies for IoT Edge Devices Using Automated Scanning Frameworks</div>
+          <div class="pub-journal">Graduate Research · Rowan University ECE Dept.</div>
+          <p class="pub-abstract">Systematic evaluation of Nessus Essentials for automated CVE discovery on IoT and embedded Linux network nodes. Analyzes detection rates, false positive reduction, and remediation priority scoring for resource-constrained deployment environments.</p>
+          <a href="https://github.com/saikolichalam/nessus-vulnerability-scanning" target="_blank" class="pub-link">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+            View Repository
+          </a>
+        </div>
+      </div>
+      <div class="pub-card reveal reveal-d2">
+        <div class="pub-year">2024</div>
+        <div class="pub-content">
+          <div class="pub-title">Edge Intelligence in Embedded Systems: A Survey of TFLite Micro Deployment on ARM Cortex-M Platforms</div>
+          <div class="pub-journal">Technical Report · ECE 590 Graduate Seminar, Rowan University</div>
+          <p class="pub-abstract">Survey and benchmarking study of TensorFlow Lite Micro inference on STM32 and ESP32 microcontrollers. Covers quantization strategies, latency vs. accuracy tradeoffs, and power consumption profiling for real-world edge ML applications.</p>
+          <a href="#contact" class="pub-link">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            Request Copy
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GITHUB -->
+<section id="github">
+  <div class="container">
+    <div class="sec-header">
+      <div class="sec-line"><span class="sec-num">06</span><span class="sec-tag">Open Source</span></div>
+      <h2 class="sec-title">GitHub Activity</h2>
+      <div class="sec-divider"></div>
+    </div>
+    <div class="gh-stats-row reveal" id="gh-stats-row">
+      <div class="gh-stat"><div class="gh-stat-num" id="gh-repos">—</div><div class="gh-stat-label">Repositories</div></div>
+      <div class="gh-stat"><div class="gh-stat-num" id="gh-stars">—</div><div class="gh-stat-label">Stars</div></div>
+      <div class="gh-stat"><div class="gh-stat-num" id="gh-followers">—</div><div class="gh-stat-label">Followers</div></div>
+      <div class="gh-stat"><div class="gh-stat-num" id="gh-forks">—</div><div class="gh-stat-label">Forks</div></div>
+    </div>
+    <div class="gh-grid" style="margin-top:1.5rem" id="gh-grid">
+      <div class="gh-card reveal">
+        <div class="gh-card-name"><span class="gh-card-icon">⬡</span> saiko.ai</div>
+        <p class="gh-card-desc">AI-powered platform for intelligent IoT edge systems with on-device ML inference.</p>
+        <div class="gh-card-meta">
+          <span class="gh-meta-item"><span class="gh-lang-dot" style="background:#3572A5"></span>Python</span>
+          <span class="gh-meta-item">★ 0</span>
+          <span class="gh-meta-item">⑂ 0</span>
+        </div>
+      </div>
+      <div class="gh-card reveal reveal-d1">
+        <div class="gh-card-name"><span class="gh-card-icon">⬡</span> mechanically-activated-elastomeric...</div>
+        <p class="gh-card-desc">Research manuscript on passive elastomeric pavement for ice mitigation via viscoelastic heat generation.</p>
+        <div class="gh-card-meta">
+          <span class="gh-meta-item"><span class="gh-lang-dot" style="background:#e34c26"></span>Research</span>
+          <span class="gh-meta-item">★ 0</span>
+        </div>
+      </div>
+      <div class="gh-card reveal reveal-d2">
+        <div class="gh-card-name"><span class="gh-card-icon">⬡</span> nessus-vulnerability-scanning</div>
+        <p class="gh-card-desc">Hands-on IoT vulnerability scanning using Nessus Essentials on Kali Linux with full CVE analysis pipeline.</p>
+        <div class="gh-card-meta">
+          <span class="gh-meta-item"><span class="gh-lang-dot" style="background:#89e051"></span>Shell</span>
+          <span class="gh-meta-item">★ 0</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="container">
+    <div class="sec-header">
+      <div class="sec-line"><span class="sec-num">07</span><span class="sec-tag">Contact</span></div>
+      <h2 class="sec-title">Open Channel</h2>
+      <div class="sec-divider"></div>
+      <p style="font-size:12px;color:var(--text2);max-width:480px">
+        Available for embedded systems, firmware, and IoT security engineering roles.
+        Response within 24 hours.
+      </p>
+    </div>
+    <div class="contact-grid">
+      <a href="https://linkedin.com/in/sai-kolichalam-2897742b8" target="_blank" class="contact-card reveal">
+        <div class="contact-icon-wrap">in</div>
+        <div>
+          <div class="contact-label">LinkedIn</div>
+          <div class="contact-val">Sai Kolichalam</div>
+        </div>
+      </a>
+      <a href="https://github.com/saikolichalam" target="_blank" class="contact-card reveal reveal-d1">
+        <div class="contact-icon-wrap">gh</div>
+        <div>
+          <div class="contact-label">GitHub</div>
+          <div class="contact-val">@saikolichalam</div>
+        </div>
+      </a>
+            <a href="mailto:saikolichalam542@gmail.com" class="contact-card reveal reveal-d2">
+        <div class="contact-icon-wrap">@</div>
+        <div>
+          <div class="contact-label">Email</div>
+          <div class="contact-val">saikolichalam542@gmail.com</div>
+        </div>
+      </a>
+      <a href="https://drive.google.com/file/d/1fRAv0YW3n_vGv1QO9DylO0CMYp-f-6mx/view?usp=drive_link" 
+target="_blank" 
+class="contact-card resume">
+
+<div class="contact-icon-wrap">CV</div>
+
+<div>
+<div class="contact-label">Resume</div>
+<div class="contact-val">Download Resume</div>
+</div>
+
+</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-left">
+    <span>Sai Kolichalam</span> · Firmware &amp; Embedded Systems Engineer · 2026
+  </div>
+  <div class="footer-right">
+    <a href="#hero" class="footer-link">Top</a>
+    <a href="https://github.com/saikolichalam" target="_blank" class="footer-link">GitHub</a>
+    <a href="https://linkedin.com/in/sai-kolichalam-2897742b8" target="_blank" class="footer-link">LinkedIn</a>
+  </div>
+</footer>
+
+<script>
+// ===== CURSOR =====
+const co=document.getElementById('co'),ci=document.getElementById('ci');
+let mx=0,my=0,ox=0,oy=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;ci.style.left=mx+'px';ci.style.top=my+'px'});
+function animCursor(){ox+=(mx-ox)*0.12;oy+=(my-oy)*0.12;co.style.left=ox+'px';co.style.top=oy+'px';requestAnimationFrame(animCursor)}
+animCursor();
+document.querySelectorAll('a,button,.project-card,.skill-card,.arch-block').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{co.style.width='46px';co.style.height='46px';co.style.opacity='1'});
+  el.addEventListener('mouseleave',()=>{co.style.width='28px';co.style.height='28px';co.style.opacity='0.6'});
+});
+
+// ===== PCB CANVAS =====
+const canvas=document.getElementById('pcb-canvas');
+const ctx=canvas.getContext('2d');
+let traces=[];
+function resize(){canvas.width=window.innerWidth;canvas.height=window.innerHeight}
+resize();window.addEventListener('resize',resize);
+function initTraces(){
+  traces=[];
+  const n=Math.floor(canvas.width/80);
+  for(let i=0;i<n;i++){
+    const x=Math.random()*canvas.width;
+    const y=Math.random()*canvas.height;
+    traces.push({x,y,dx:(Math.random()-0.5)*0.5,dy:(Math.random()-0.5)*0.5,
+      segs:[],maxSegs:6+Math.floor(Math.random()*8),color:Math.random()>0.7?'#00ff9d':'#00d4ff',
+      w:Math.random()>0.8?2:1,alpha:0.3+Math.random()*0.4,
+      life:0,maxLife:200+Math.random()*300
+    });
+  }
+}
+initTraces();
+function drawPCB(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  traces.forEach(t=>{
+    t.life++;
+    if(t.life>t.maxLife){
+      const i=traces.indexOf(t);
+      traces[i]={x:Math.random()*canvas.width,y:Math.random()*canvas.height,
+        dx:(Math.random()-0.5)*0.5,dy:(Math.random()-0.5)*0.5,
+        segs:[],maxSegs:6+Math.floor(Math.random()*8),
+        color:Math.random()>0.7?'#00ff9d':'#00d4ff',
+        w:Math.random()>0.8?2:1,alpha:0.3+Math.random()*0.4,
+        life:0,maxLife:200+Math.random()*300};
+      return;
+    }
+    // Add segment
+    if(t.segs.length===0||(t.segs.length<t.maxSegs&&Math.random()<0.015)){
+      const last=t.segs.length>0?t.segs[t.segs.length-1]:{x:t.x,y:t.y};
+      const dir=Math.random()<0.5;
+      const len=30+Math.random()*80;
+      const nx=dir?last.x+len*(Math.random()>0.5?1:-1):last.x;
+      const ny=dir?last.y:last.y+len*(Math.random()>0.5?1:-1);
+      t.segs.push({x:nx,y:ny});
+    }
+    if(t.segs.length<2)return;
+    const fade=Math.min(t.life/30,1)*Math.min((t.maxLife-t.life)/30,1);
+    ctx.globalAlpha=t.alpha*fade;
+    ctx.strokeStyle=t.color;
+    ctx.lineWidth=t.w;
+    ctx.lineCap='round';
+    ctx.beginPath();
+    ctx.moveTo(t.segs[0].x,t.segs[0].y);
+    for(let i=1;i<t.segs.length;i++)ctx.lineTo(t.segs[i].x,t.segs[i].y);
+    ctx.stroke();
+    // Vias
+    t.segs.forEach((s,i)=>{
+      if(i%3===0){
+        ctx.globalAlpha=t.alpha*fade*0.8;
+        ctx.beginPath();
+        ctx.arc(s.x,s.y,2.5,0,Math.PI*2);
+        ctx.strokeStyle=t.color;
+        ctx.lineWidth=1;
+        ctx.stroke();
+      }
+    });
+    ctx.globalAlpha=1;
+  });
+  requestAnimationFrame(drawPCB);
+}
+drawPCB();
+
+// ===== PIN DIAGRAM =====
+const leftPins=[
+  {n:1,f:'VDD',t:'PWR'},{n:2,f:'PC14',t:'OSC32'},{n:3,f:'PC15',t:'OSC32'},
+  {n:5,f:'PH0',t:'OSC_IN'},{n:6,f:'PH1',t:'OSC_OUT'},{n:11,f:'PA0',t:'ADC1_IN0'},
+  {n:12,f:'PA1',t:'TIM2_CH2'},{n:13,f:'PA2',t:'USART2_TX'},{n:14,f:'PA3',t:'USART2_RX'},
+];
+const rightPins=[
+  {n:58,f:'PA5',t:'SPI1_SCK'},{n:59,f:'PA6',t:'SPI1_MISO'},{n:60,f:'PA7',t:'SPI1_MOSI'},
+  {n:61,f:'PC4',t:'ADC1_IN14'},{n:62,f:'PC5',t:'ADC1_IN15'},{n:63,f:'PB0',t:'TIM3_CH3'},
+  {n:66,f:'PB10',t:'I2C2_SCL'},{n:75,f:'PB11',t:'I2C2_SDA'},{n:76,f:'BOOT1',t:'BOOT'},
+];
+function buildPins(arr,side){
+  return arr.map(p=>`
+    <div class="pin-entry">
+      <div class="pin-num">${p.n}</div>
+      <div class="${side==='right'?'pin-wire':'pin-wire'}" style="${Math.random()>0.6?'background:var(--cyan);box-shadow:0 0 4px var(--cyan)':''}"></div>
+      <div>
+        <div class="pin-func">${p.f}</div>
+        <div class="pin-type">${p.t}</div>
+      </div>
+    </div>`).join('');
+}
+document.getElementById('pin-left').innerHTML=buildPins(leftPins,'left');
+document.getElementById('pin-right').innerHTML=buildPins(rightPins,'right');
+
+// ===== SKILL BARS =====
+const observer=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      e.target.classList.add('in');
+      e.target.querySelectorAll('.skill-bar-fill').forEach(b=>{
+        b.style.width=b.dataset.w+'%';
+      });
+    }
+  });
+},{threshold:0.1});
+document.querySelectorAll('.reveal').forEach(el=>observer.observe(el));
+
+// ===== GITHUB API =====
+async function loadGH(){
+  try{
+    const u=await fetch('https://api.github.com/users/saikolichalam').then(r=>r.json());
+    document.getElementById('gh-repos').textContent=u.public_repos||'—';
+    document.getElementById('gh-followers').textContent=u.followers||'—';
+    document.getElementById('repos-count')?document.getElementById('repos-count').textContent=u.public_repos:'';
+    const repos=await fetch('https://api.github.com/users/saikolichalam/repos?per_page=100').then(r=>r.json());
+    if(Array.isArray(repos)){
+      document.getElementById('gh-stars').textContent=repos.reduce((s,r)=>s+r.stargazers_count,0);
+      document.getElementById('gh-forks').textContent=repos.reduce((s,r)=>s+r.forks_count,0);
+    }
+  }catch(e){
+    ['gh-repos','gh-stars','gh-followers','gh-forks'].forEach(id=>{
+      const el=document.getElementById(id);
+      if(el)el.textContent='—';
+    });
+  }
+}
+loadGH();
+
+// ===== TYPING EFFECT NAV BRAND =====
+const brand=document.querySelector('.nav-brand');
+const orig=brand.innerHTML;
+setTimeout(()=>{
+  const chars='SK::dev';
+  let i=0;brand.innerHTML='';
+  const t=setInterval(()=>{
+    b
+// (typing effect completed)
+  if(i < chars.length){
+    if(chars[i]==='<') brand.innerHTML += orig.includes('<span') ? '<span style="color:var(--text2)">' : '';
+    else if(chars[i]==='>') brand.innerHTML += '</span>';
+    else brand.innerHTML += chars[i];
+    i++;
+  } else {
+    clearInterval(t);
+    brand.innerHTML = orig;
+  }
+  },80);
+},1200);
+</script>
+</body>
+</html>
